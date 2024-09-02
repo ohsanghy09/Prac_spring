@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -11,34 +12,17 @@ import java.util.Map;
 @RestController
 public class HelloController {
 
-    @GetMapping("/api/hello")
-    public List<Map<String, String>> hello() {
-        List<Map<String, String>> responseList = new ArrayList<>();
+    @GetMapping("/api/data")
+    public String sendDataWithToken(HttpServletResponse response) {
+        // 생성된 토큰 (예시로 고정된 값 사용)
+        String token = "your-generated-token-here";
 
-        Map<String, String> item1 = new HashMap<>();
-        item1.put("id", "6851");
-        item1.put("color", "#26CD29FF");
-        item1.put("details", "내용");
-        item1.put("end", "2024-08-20T14:00");
-        item1.put("kind", "답십리");
-        item1.put("name", "답십리");
-        item1.put("start", "2024-08-15T14:00");
-        item1.put("timed", "true");
+        // 응답 헤더에 토큰 추가
+        response.setHeader("Authorization", "Bearer " + token);
 
-        Map<String, String> item2 = new HashMap<>();
-        item2.put("id", "71d4");
-        item2.put("name", "전농동");
-        item2.put("details", "내용: 전농동");
-        item2.put("color", "#3E4A7DFF");
-        item2.put("kind", "전농동");
-        item2.put("start", "2024-08-17T14:56");
-        item2.put("end", "2024-08-22T14:57");
-        item2.put("timed", "true");
+        // 클라이언트로 보낼 데이터
+        return "This is the protected data";
 
-        responseList.add(item1);
-        responseList.add(item2);
-
-        return responseList;
     }
 
     @GetMapping("/api/Group")
