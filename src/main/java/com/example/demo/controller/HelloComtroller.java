@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
-public class HelloController {
+public class HelloComtroller {
 
     @GetMapping("/api/data")
     public String sendDataWithToken(HttpServletResponse response) {
@@ -25,22 +26,15 @@ public class HelloController {
 
     }
 
-    @GetMapping("/api/Group")
-    public Map<String, String> Group() {
-        Map<String, String> response = new HashMap<>();
-        response.put("id", "2d8d");
-        response.put("group_item", "답십리");
-        return response;
-    }
 
-    @PostMapping("/api/addEvent")
-    public  void addEvent(@RequestBody Map<String, String> event) {
-        // 받은 이벤트 데이터를 처리 (예: DB 저장)
-        // 여기서는 간단히 ID를 추가하고 반환
+        @GetMapping("/protected-data")
+        public ResponseEntity<String> getProtectedData(@RequestHeader("Authorization") String token) {
+            // JWT 토큰을 파싱하거나 유효성 검사를 수행할 수 있습니다.
+            // 이 예제에서는 간단히 토큰을 출력하고 반환합니다.
+            System.out.println("Received Token: " + token);
 
-        event.put("id", "new_id");
-    }
-
-
+            // 보호된 데이터를 반환 (예시로 문자열을 반환)
+            return ResponseEntity.ok("This is protected data token");
+        }
 
 }
