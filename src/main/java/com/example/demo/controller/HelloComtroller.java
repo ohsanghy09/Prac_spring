@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,30 +12,29 @@ import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
+@RequestMapping("/api")
 public class HelloComtroller {
 
-    @GetMapping("/api/data")
-    public String sendDataWithToken(HttpServletResponse response) {
-        // 생성된 토큰 (예시로 고정된 값 사용)
-        String token = "your-generated-token-here";
+    @GetMapping("/process")
+    public ResponseEntity<String> processRequest() {
+        // 내부 비즈니스 로직에 따른 조건
+        boolean condition1 = true; // 임의의 조건 1
+        boolean condition2 = false; // 임의의 조건 2
 
-        // 응답 헤더에 토큰 추가
-        response.setHeader("Authorization", "Bearer " + token);
-
-        // 클라이언트로 보낼 데이터
-        return "This is the protected data";
-
-    }
-
-
-        @GetMapping("/protected-data")
-        public ResponseEntity<String> getProtectedData(@RequestHeader("Authorization") String token) {
-            // JWT 토큰을 파싱하거나 유효성 검사를 수행할 수 있습니다.
-            // 이 예제에서는 간단히 토큰을 출력하고 반환합니다.
-            System.out.println("Received Token: " + token);
-
-            // 보호된 데이터를 반환 (예시로 문자열을 반환)
-            return ResponseEntity.ok("This is protected data token");
+        // 첫 번째 조건이 참일 때 - 200 OK 반환
+        if (condition1) {
+            return new ResponseEntity<>("Process successful!", HttpStatus.OK);
         }
-
+        // 두 번째 조건이 참일 때 - 201 Created 반환
+        else if (condition2) {
+            return new ResponseEntity<>("Resource created!", HttpStatus.CREATED);
+        }
+        // 아무 조건도 만족하지 않을 때 - 500 Internal Server Error 반환
+        else {
+            return new ResponseEntity<>("An error occurred!", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
+
+
+
