@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.FindId_User;
-import com.example.demo.model.UpdatePassword_User;
-import com.example.demo.model.UpdatePassword_User2;
-import com.example.demo.model.User;
+import com.example.demo.model.*;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,20 +40,20 @@ public class HelloComtroller {
 
     //회원탈퇴 메서드
     @PostMapping("/deleteUser")
-    public Map<String, String> createUser(@RequestBody User user) {
+    public ResponseEntity<Map<String, String>> uSer(@RequestBody User user) {
         // 전달받은 사용자 정보를 처리
         Map<String, String> response = new HashMap<>();
 
         // 유효성 검사 (필요시 추가)
-        if (user.getMember_id() == null || user.getPassword() == null) {
-            response.put("error", "Invalid data: id or password is missing");
-            return response;
+        if (user.getPassword() == null || user.getMember_id() == null) {
+            response.put("error", "Invalid data: password is missing");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);  // 400 상태 코드 반환
         }
 
-        // 정상적인 경우 member_id와 password를 반환
+        // 정상적인 경우 password, member_id 반환
         response.put("member_id", user.getMember_id());
         response.put("password", user.getPassword());
-        return response;
+        return new ResponseEntity<>(response, HttpStatus.OK);  // 200 상태 코드 반환
     }
 
     //비밀번호 변경 회원 검색
@@ -114,6 +111,22 @@ public class HelloComtroller {
         return new ResponseEntity<>(response, HttpStatus.OK);  // 200 상태 코드 반환
     }
 
+    //아이디 중복확인
+    @PostMapping("/CheckId")
+    public ResponseEntity<Map<String, String>> selectIdUser(@RequestBody SelectId_User user) {
+        // 전달받은 사용자 정보를 처리
+        Map<String, String> response = new HashMap<>();
+
+        // 유효성 검사 (필요시 추가)
+        if (user.getMember_id() == null) {
+            response.put("error", "Invalid data: password is missing");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);  // 400 상태 코드 반환
+        }
+
+        // 정상적인 경우 password 반환
+        response.put("password", user.getPassword());
+        return new ResponseEntity<>(HttpStatus.OK);  // 200 상태 코드 반환
+    }
     // 토큰 발급
     @GetMapping("/token")
     public String sendDataWithToken(HttpServletResponse response) {

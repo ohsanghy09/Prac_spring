@@ -1,26 +1,20 @@
 package com.example.demo.model;
 
-public class UpdatePassword_User {
-    private String member_id;
-    private String email;
+public class UpdatePassword_User2 {
+    private String password;
 
     // 기본 생성자
-    public UpdatePassword_User() {}
+    public UpdatePassword_User2() {}
 
     // 매개변수가 있는 생성자
-    public UpdatePassword_User(String member_id, String email) {
-        this.member_id = member_id;
-        this.email = email;
+    public UpdatePassword_User2(String password) {
+        this.password = password;
     }
 
     // Getter 및 Setter
-    public String getMember_id() {
+    public String getPassword() {
 
-        return member_id;
-    }
-
-    public String getEmail() {
-        return email;
+        return password;
     }
 
 }
