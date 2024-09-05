@@ -1,10 +1,15 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.FindId_User;
+import com.example.demo.model.UpdatePassword_User;
+import com.example.demo.model.UpdatePassword_User2;
+import com.example.demo.model.User;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +20,7 @@ import java.util.Map;
 @RequestMapping("/api")
 public class HelloComtroller {
 
+    // 조건에 따른 응답 상태코드 반환
     @GetMapping("/process")
     public ResponseEntity<String> processRequest() {
         // 내부 비즈니스 로직에 따른 조건
@@ -23,7 +29,7 @@ public class HelloComtroller {
 
         // 첫 번째 조건이 참일 때 - 200 OK 반환
         if (condition1) {
-            return new ResponseEntity<>("Process successful!", HttpStatus.OK);
+            return new ResponseEntity<>("오상현", HttpStatus.OK);
         }
         // 두 번째 조건이 참일 때 - 201 Created 반환
         else if (condition2) {
@@ -33,6 +39,104 @@ public class HelloComtroller {
         else {
             return new ResponseEntity<>("An error occurred!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    //회원탈퇴 메서드
+    @PostMapping("/deleteUser")
+    public Map<String, String> createUser(@RequestBody User user) {
+        // 전달받은 사용자 정보를 처리
+        Map<String, String> response = new HashMap<>();
+
+        // 유효성 검사 (필요시 추가)
+        if (user.getMember_id() == null || user.getPassword() == null) {
+            response.put("error", "Invalid data: id or password is missing");
+            return response;
+        }
+
+        // 정상적인 경우 member_id와 password를 반환
+        response.put("member_id", user.getMember_id());
+        response.put("password", user.getPassword());
+        return response;
+    }
+
+    //비밀번호 변경 회원 검색
+    @PostMapping("/UpdatefoundUser")
+    public Map<String, String> createUser(@RequestBody UpdatePassword_User user) {
+        // 전달받은 사용자 정보를 처리
+        Map<String, String> response = new HashMap<>();
+
+        // 유효성 검사 (필요시 추가)
+        if (user.getMember_id() == null || user.getEmail() == null) {
+            response.put("error", "Invalid data: id or password is missing");
+            return response;
+        }
+
+        // 정상적인 경우 member_id와 email 반환
+        response.put("member_id", user.getMember_id());
+        response.put("email", user.getEmail());
+        return response;
+    }
+
+    //비밀 번호 변경
+    @PostMapping("/UpdatePasswordUser")
+    public ResponseEntity<Map<String, String>> updateUserPassword(@RequestBody UpdatePassword_User2 user) {
+        // 전달받은 사용자 정보를 처리
+        Map<String, String> response = new HashMap<>();
+
+        // 유효성 검사 (필요시 추가)
+        if (user.getPassword() == null) {
+            response.put("error", "Invalid data: password is missing");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);  // 400 상태 코드 반환
+        }
+
+        // 정상적인 경우 password 반환
+        response.put("password", user.getPassword());
+        return new ResponseEntity<>(HttpStatus.OK);  // 200 상태 코드 반환
+    }
+
+    //아이디 찾기
+    @PostMapping("/FindIdUser")
+    public ResponseEntity<Map<String, String>> findIdUser(@RequestBody FindId_User user) {
+        // 전달받은 사용자 정보를 처리
+        Map<String, String> response = new HashMap<>();
+
+        // 유효성 검사 (필요시 추가)
+        if (user.getName() == null || user.getEmail() == null || user.getBirth() == null) {
+            response.put("error", "Invalid data: password is missing");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);  // 400 상태 코드 반환
+        }
+
+        // 정상적인 경우 data 반환
+        response.put("member_id", "ohsanghy09");
+        response.put("name", user.getName());
+        response.put("email", user.getEmail());
+        response.put("birth", user.getBirth());
+        return new ResponseEntity<>(response, HttpStatus.OK);  // 200 상태 코드 반환
+    }
+
+    // 토큰 발급
+    @GetMapping("/token")
+    public String sendDataWithToken(HttpServletResponse response) {
+        // 생성된 토큰 (예시로 고정된 값 사용)
+        String token = "your-generated-token-here";
+
+        // 응답 헤더에 토큰 추가
+        response.setHeader("Authorization", "Bearer " + token);
+
+        // 클라이언트로 보낼 데이터
+        return "This is the protected data";
+
+    }
+
+    // 토큰 유효성 검사
+    @GetMapping("/checked_token")
+    public ResponseEntity<String> getProtectedData(@RequestHeader("Authorization") String token) {
+        // JWT 토큰을 파싱하거나 유효성 검사를 수행할 수 있습니다.
+        // 이 예제에서는 간단히 토큰을 출력하고 반환합니다.
+        System.out.println("Received Token: " + token);
+
+        // 보호된 데이터를 반환 (예시로 문자열을 반환)
+        return ResponseEntity.ok("This is protected data token");
     }
 }
 
