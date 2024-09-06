@@ -18,7 +18,7 @@ import java.util.Map;
 public class HelloComtroller {
 
     // 조건에 따른 응답 상태코드 반환
-    @GetMapping("/process")
+    @GetMapping("/Navigation")
     public ResponseEntity<String> processRequest() {
         // 내부 비즈니스 로직에 따른 조건
         boolean condition1 = true; // 임의의 조건 1
@@ -117,15 +117,46 @@ public class HelloComtroller {
         // 전달받은 사용자 정보를 처리
         Map<String, String> response = new HashMap<>();
 
+        // DB에 아이디가 없을 경우 null 반환
+//        if (user.getMember_id() == null) {
+            response.put("message","available");
+            return new ResponseEntity<>(response, HttpStatus.OK);  // 400 상태 코드 반환
+//        }
+
+        // DB에 아이디가 있을 경우 아이디값 반환
+//        response.put("member_id", user.getMember_id());
+//        return new ResponseEntity<>(response,HttpStatus.OK);  // 200 상태 코드 반환
+    }
+
+    //이메일 인증번호 전송
+    @PostMapping("/CheckEmail")
+    public ResponseEntity<Map<String, String>> sendEmail(@RequestBody SendEmail_User user) {
+        // 전달받은 사용자 정보를 처리
+        Map<String, String> response = new HashMap<>();
+
         // 유효성 검사 (필요시 추가)
-        if (user.getMember_id() == null) {
+        if (user.getEmail() == null) {
             response.put("error", "Invalid data: password is missing");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);  // 400 상태 코드 반환
         }
+        // 정상적인 경우 data 반환
+        response.put("check_number", "GOOD1234");
+        return new ResponseEntity<>(response, HttpStatus.OK);  // 200 상태 코드 반환
+    }
+    //회원 내용 요청응답
+    @PostMapping("/AddMember")
+    public ResponseEntity<Map<String, String>> addMember(@RequestBody Addmember_User user) {
+        // 전달받은 사용자 정보를 처리
+        Map<String, String> response = new HashMap<>();
 
-        // 정상적인 경우 password 반환
+        // 정상적인 경우 data 반환
+        response.put("member_id", user.getMember_id());
         response.put("password", user.getPassword());
-        return new ResponseEntity<>(HttpStatus.OK);  // 200 상태 코드 반환
+        response.put("email", user.getEmail());
+        response.put("name", user.getName());
+        response.put("birth", user.getBirth());
+        response.put("gender", user.getGender());
+        return new ResponseEntity<>(response, HttpStatus.OK);  // 200 상태 코드 반환
     }
     // 토큰 발급
     @GetMapping("/token")
