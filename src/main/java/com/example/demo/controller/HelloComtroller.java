@@ -194,8 +194,8 @@ public class HelloComtroller {
     public ResponseEntity<List<Calender_User>> getGroupSchedules() {
         // JSON 데이터를 GroupSchedule 객체로 변환
         List<Calender_User> groupSchedules = Arrays.asList(
-                new Calender_User("운동", "천호동에서 운동", "#2320A7FF", "천호동", "2024-08-28T17:20", "2024-08-29T17:20", true),
-                new Calender_User("추가한 그룹 일정", "새로 추가한 그룹 일정 내용", "#FF0000FF", "text", "2024-08-30T17:22", "2024-08-31T17:22", true)
+                new Calender_User("d71a","운동", "천호동에서 운동", "#2320A7FF", "천호동", "2024-08-28T17:20", "2024-08-29T17:20", true),
+                new Calender_User("799c","추가한 그룹 일정", "새로 추가한 그룹 일정 내용", "#FF0000FF", "text", "2024-08-30T17:22", "2024-08-31T17:22", true)
         );
 
         return new ResponseEntity<>(groupSchedules, HttpStatus.OK);
@@ -207,12 +207,37 @@ public class HelloComtroller {
         public ResponseEntity<List<Calendar_Group_User>> getGroupItems() {
             // JSON 데이터를 GroupItem 객체로 변환
             List<Calendar_Group_User> groupItems = Arrays.asList(
-                    new Calendar_Group_User("천호동"),
-                    new Calendar_Group_User("text")
+                    new Calendar_Group_User("7f44", "천호동"),
+                    new Calendar_Group_User("0b99", "text")
             );
 
             return new ResponseEntity<>(groupItems, HttpStatus.OK);
         }
+
+    @PostMapping ("/echo-token")
+    public ResponseEntity<String> echoToken(@RequestHeader("Authorization") String token) {
+        // 헤더에서 받은 토큰을 그대로 응답으로 반환
+        return ResponseEntity.ok("Received Token: " + token);
+    }
+
+    @PostMapping("/addGroup")
+    public ResponseEntity<Map<String, Object>> handlePostData(@RequestBody Map<String, Object> requestData) {
+        // 기존 데이터를 담을 response 객체 생성
+        Map<String, Object> response = new HashMap<>();
+        // Vue에서 보낸 데이터를 response에 추가
+        response.put("groupItem", requestData);
+
+        // 응답으로 기존 데이터와 추가된 Vue 데이터 반환
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/data")
+    public ResponseEntity<Map<String, String>> getData() {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Hello from Spring Boot!");
+        response.put("status", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
 
 

@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 public class Calender_User {
+    private String id;
     private String name;
     private String details;
     private String color;
@@ -10,7 +11,8 @@ public class Calender_User {
     private boolean timed;
 
     // Constructor
-    public Calender_User(String name, String details, String color, String kind, String start, String end, boolean timed) {
+    public Calender_User(String id, String name, String details, String color, String kind, String start, String end, boolean timed) {
+        this.id = id;
         this.name = name;
         this.details = details;
         this.color = color;
@@ -22,6 +24,9 @@ public class Calender_User {
 
     // Getters and setters
 
+    public String getId() {
+        return id;
+    }
     public String getName() {
         return name;
     }
