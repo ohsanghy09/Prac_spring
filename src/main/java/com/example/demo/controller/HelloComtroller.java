@@ -236,7 +236,7 @@ public class HelloComtroller {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Hello from Spring Boot!");
         response.put("status", "success");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
 }
 
