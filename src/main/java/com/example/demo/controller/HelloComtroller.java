@@ -88,7 +88,7 @@ public class HelloComtroller {
     }
 
     //아이디 찾기
-    @PostMapping("/FindIdUser")
+    @PostMapping("/FIndIdMember")
     public ResponseEntity<Map<String, String>> findIdUser(@RequestBody FindId_User user) {
         // 전달받은 사용자 정보를 처리
         Map<String, String> response = new HashMap<>();
@@ -203,13 +203,15 @@ public class HelloComtroller {
 
 
 
-        @GetMapping("/group-items")
+        @GetMapping("/addMemo")
         public ResponseEntity<List<Calendar_Group_User>> getGroupItems() {
             // JSON 데이터를 GroupItem 객체로 변환
             List<Calendar_Group_User> groupItems = Arrays.asList(
-                    new Calendar_Group_User("7f44", "천호동"),
-                    new Calendar_Group_User("0b99", "text")
-            );
+                    new Calendar_Group_User("7f44", "안녕", "ㅎㅇㅎㅇ", "2024-09-20T17:37"),
+                    new Calendar_Group_User("6fdd", "안녕하십니꽝", "해윙해윙", "2024-09-20T18:23"),
+                    new Calendar_Group_User("6fd2", "안녕하십니꽝꽝꽁꽝", "해윙", "2024-09-20T18:54")
+                    );
+
 
             return new ResponseEntity<>(groupItems, HttpStatus.OK);
         }
@@ -236,7 +238,7 @@ public class HelloComtroller {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Hello from Spring Boot!");
         response.put("status", "success");
-        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
 
