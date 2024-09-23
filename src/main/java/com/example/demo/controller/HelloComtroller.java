@@ -207,8 +207,8 @@ public class HelloComtroller {
         public ResponseEntity<List<Calendar_Group_User>> getGroupItems() {
             // JSON 데이터를 GroupItem 객체로 변환
             List<Calendar_Group_User> groupItems = Arrays.asList(
-                    new Calendar_Group_User("7f44", "안녕", "ㅎㅇㅎㅇ", "2024-09-20T17:37"),
-                    new Calendar_Group_User("6fdd", "안녕하십니꽝", "해윙해윙", "2024-09-20T18:23"),
+                    new Calendar_Group_User("7f44", "안녕", "ㅎㅇㅎㅇ", "2024-09-21T17:37"),
+                    new Calendar_Group_User("6fdd", "안녕하십니꽝", "해윙해윙", "2024-10-20T18:23"),
                     new Calendar_Group_User("6fd2", "안녕하십니꽝꽝꽁꽝", "해윙", "2024-09-20T18:54")
                     );
 
@@ -217,7 +217,7 @@ public class HelloComtroller {
         }
 
 
-    @GetMapping("/resetGroup111")
+    @GetMapping("/resetGroup")
     public ResponseEntity<List<Calendar_Group_User2>> getGroupItem() {
         // JSON 데이터를 GroupItem 객체로 변환
         List<Calendar_Group_User2> groupItems = Arrays.asList(
@@ -260,7 +260,7 @@ public class HelloComtroller {
         return ResponseEntity.ok("Data received successfully!");
     }
 
-    @GetMapping("/resetGroup")
+    @GetMapping("/resetGroup1111")
     public ResponseEntity<String> receiveData(
             @RequestHeader("Authorization") String token,
             @RequestParam("message") String message) {
