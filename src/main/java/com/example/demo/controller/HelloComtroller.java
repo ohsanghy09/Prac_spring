@@ -125,7 +125,7 @@ public class HelloComtroller {
     }
 
     //이메일 인증번호 전송
-    @PostMapping("/CheckEmail")
+    @PostMapping("/CheckEmaill")
     public ResponseEntity<Map<String, String>> sendEmail(@RequestBody SendEmail_User user) {
         // 전달받은 사용자 정보를 처리
         Map<String, String> response = new HashMap<>();
@@ -159,7 +159,7 @@ public class HelloComtroller {
     }
 
     // 토큰 발급
-    @PostMapping("/token")
+    @PostMapping("/CheckEmail")
     public ResponseEntity<Map<String, Object>> sendDataWithToken(@RequestBody User user, HttpServletResponse response) {
         // 생성된 토큰 (예시로 고정된 값 사용)
         String token = "your-generated-token-here";
@@ -190,7 +190,7 @@ public class HelloComtroller {
     }
 
 
-    @GetMapping("/groups")
+    @GetMapping("/resetSchedule")
     public ResponseEntity<List<Calender_User>> getGroupSchedules() {
         // JSON 데이터를 GroupSchedule 객체로 변환
         List<Calender_User> groupSchedules = Arrays.asList(
@@ -216,6 +216,20 @@ public class HelloComtroller {
             return new ResponseEntity<>(groupItems, HttpStatus.OK);
         }
 
+
+    @GetMapping("/resetGroup111")
+    public ResponseEntity<List<Calendar_Group_User2>> getGroupItem() {
+        // JSON 데이터를 GroupItem 객체로 변환
+        List<Calendar_Group_User2> groupItems = Arrays.asList(
+                new Calendar_Group_User2("7f44", "천호동"),
+                new Calendar_Group_User2("6fdd", "장안동"),
+                new Calendar_Group_User2("6fd2", "답십리동")
+        );
+
+
+        return new ResponseEntity<>(groupItems, HttpStatus.OK);
+    }
+
     @PostMapping ("/echo-token")
     public ResponseEntity<String> echoToken(@RequestHeader("Authorization") String token) {
         // 헤더에서 받은 토큰을 그대로 응답으로 반환
@@ -233,12 +247,48 @@ public class HelloComtroller {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping("/jwtdata")
+    public ResponseEntity<String> receiveData(@RequestHeader("Authorization") String token, @RequestBody Map<String, Object> payload) {
+        // 토큰을 파싱하거나 검증하는 로직 추가 (JWT 검증 등)
+        System.out.println("Received Token: " + token);
+
+        // 전송된 데이터 확인
+        String message = (String) payload.get("message");
+        System.out.println("Received Message: " + message);
+
+        // 성공적인 응답 반환
+        return ResponseEntity.ok("Data received successfully!");
+    }
+
+    @GetMapping("/resetGroup")
+    public ResponseEntity<String> receiveData(
+            @RequestHeader("Authorization") String token,
+            @RequestParam("message") String message) {
+        // 토큰을 파싱하거나 검증하는 로직 추가 (JWT 검증 등)
+        System.out.println("Received Token: " + token);
+
+        // URL 쿼리에서 전송된 데이터 확인
+        System.out.println("Received Message: " + message);
+
+        // 성공적인 응답 반환
+        return ResponseEntity.ok("Data received successfully!");
+    }
+
     @GetMapping("/data")
-    public ResponseEntity<Map<String, String>> getData() {
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Hello from Spring Boot!");
-        response.put("status", "success");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<String> getData(@RequestHeader(value = "Authorization", required = false) String token) {
+        // 토큰이 없는 경우
+        if (token == null || !token.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized: No valid token provided");
+        }
+
+        // 간단하게 토큰 값이 'valid-token'인지 확인
+        String jwtToken = token.substring(7); // "Bearer " 이후의 토큰만 추출
+        if (!"valid-token".equals(jwtToken)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unauthorized: Invalid token");
+        }
+
+        // 토큰이 유효하면 성공 응답
+        return ResponseEntity.ok("Data received successfully!");
     }
 }
 
